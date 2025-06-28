@@ -1,0 +1,15 @@
+# Ignore EXE Filse
+*.exe
+
+# Facial auth code
+program.py
+server.py
+facial-recognition.ico
+facial-recognition.png
+SMSys Server.bat
+*.spec
+*.specs
+face_recognition_models/
+add_user.png
+teachers_encodings.json
+media/teachers/*.jpg

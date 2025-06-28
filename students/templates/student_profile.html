@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .profile-info {
+            text-align: center;
+        }
+        .ratings {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+        .rating-star {
+            color: #ffd700;
+        }
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .reports {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .report-item {
+            background-color: rgba(5, 5, 5, 0.15);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+        .button-container,
+        .edit-container {
+            text-align: center;
+        }
+        .button-container button,
+        .edit-container button {
+            width: 100%;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .button-container button:hover,
+        .edit-container button:hover {
+            background-color: #45a049;
+        }
+        #seeall {
+            text-align: center;
+            padding: 20px;
+            background: rgba(5, 5, 5, 0.15);
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 6px;
+        }
+
+        /* ===== Modal Overlay (initially hidden) ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Semi-transparent black + blur */
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.7);
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            font-size: 20px;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        /* ===== Responsive Adjustments ===== */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: space-between;
+            }
+            .sidebar > * {
+                flex: 1 1 calc(50% - 10px);
+            }
+            .sidebar .reports {
+                flex: 1 1 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-info">
+                <h2>{{ student.name }}</h2>
+                <p>Grade: {{ student.grade }}</p>
+                <div class="ratings" data-rating="{{ student.rating }}"></div>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="reports">
+                <h3>Reports</h3>
+                {% for r in reports|slice:":2" %}
+                <div class="report-item">
+                    <p>{{ r.title }} | {% if r.is_positive %} ✅ {% else %} ❌ {% endif %}</p>
+                    <p>{{ r.body }}</p>
+                </div>
+                {% endfor %}
+                <div id="seeall">
+                    See All
+                </div>
+            </div>
+            <div class="button-container">
+                <a href="/reports/students/{{ student.id }}/add"><button>Add Report</button></a>
+            </div>
+            <div class="button-container">
+                <a href="/students/{{ student.id }}/clean_reports" onclick="return(confirm('are you sure you want to delete all reports?'))">
+                  <button style="background-color: red;">Clean Reports</button>
+                </a>
+            </div>
+        </div>
+        <div class="edit-container" style="grid-column: span 2;">
+            <a href="{{ student.id }}/edit"><button>Edit Student ✒️</button></a>
+        </div>
+    </div>
+
+    <!-- ===== Hidden Modal for “See All” ===== -->
+    <div id="reportsModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="modal-close" id="closeModal">&times;</span>
+            <h3>All Reports</h3>
+            <!-- Loop through all reports here -->
+            {% for r in reports %}
+            <div class="report-item">
+                <p>{{ r.title }} | {% if r.is_positive %} ✅ {% else %} ❌ {% endif %}</p>
+                <p>{{ r.body }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        // ===== Star Ratings =====
+        function convertToStars(rating) {
+            const maxStars = 5;
+            const fullStar = '★';
+            const emptyStar = '☆';
+            let stars = '';
+            for (let i = 1; i <= maxStars; i++) {
+                stars += (i <= rating ? fullStar : emptyStar);
+            }
+            return stars;
+        }
+
+        function populateStarRatings() {
+            const rating = parseInt("{{ student.computed_rating }}");
+            const ratingsContainer = document.querySelector('div[data-rating]');
+            if (ratingsContainer) {
+                ratingsContainer.textContent = convertToStars(rating);
+            }
+        }
+        populateStarRatings();
+
+        // ===== Modal Show/Hide =====
+        const seeAllBtn = document.getElementById('seeall');
+        const modalOverlay = document.getElementById('reportsModal');
+        const closeModalBtn = document.getElementById('closeModal');
+
+        seeAllBtn.addEventListener('click', () => {
+            modalOverlay.classList.add('active');
+        });
+        closeModalBtn.addEventListener('click', () => {
+            modalOverlay.classList.remove('active');
+        });
+        // Close if user clicks outside the modal-content
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) {
+                modalOverlay.classList.remove('active');
+            }
+        });
+
+        // ===== Send Reports via WhatsApp =====
+        function send_reports() {
+            let text = `An automated report about your son, {{ student.name }}:\n\n`;
+            {% for i in reports %}
+            text += `{{ i.title }} \n\n{{ i.body }} \n\n==================\n\n`;
+            {% endfor %}
+            window.open(`https://wa.me/{{ student.parent_number }}?text=${encodeURIComponent(text)}`);
+            window.open("{{ student.id }}/clean_reports");
+        }
+    </script>
+</body>
+</html>

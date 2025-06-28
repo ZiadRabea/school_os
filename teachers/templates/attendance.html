@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendances</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        td {
+            background-color: #444;
+        }
+        .action-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            margin-top:10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width:100%;
+            font-size: 16px;
+            white-space: nowrap; /* Prevent button text wrapping */
+            overflow: hidden; /* Hide overflowing text */
+            text-overflow: ellipsis; /* Show ellipsis for overflow */
+        }
+        .action-button:hover {
+            background-color: #45a049;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Today's Attendances</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Teacher Name</th>
+                    <th>Time</th>
+                    <th>Minutes Late</th>
+                    <th>Salary Deduction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sample attendance rows -->
+                {%for attendance in attendances%}
+                <tr>
+                    <td>{{attendance.teacher.name}}</td>
+                    <td>{{attendance.time|date:"g:i a"}}</td>
+                    <td>{{attendance.difference}}</td>
+                    <td>{{attendance.Salary_deduction}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <a href="/absence"> <button class="action-button"> Register Absences </button></a>
+    </div>
+</body>
+</html>

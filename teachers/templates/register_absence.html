@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Absence Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        form {
+            display: grid;
+            gap: 20px;
+        }
+        label {
+            color: #fff;
+            font-size: 18px;
+        }
+        select, input[type="checkbox"], input[type="number"] {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Teacher Absence Management</h2>
+        <form method="post", enctype="multipart/form-data">
+            {%csrf_token%}
+            <label for="teacher">Select Teacher:</label>
+            {{form.teacher}}
+            
+            <label>
+                {{form.permission}}
+                <span>Permission for Absence</span>
+            </label>
+            
+            <label for="deduction">Salary Deduction:</label>
+            <select id="deduction" name="deduction" required>
+                <option value="">Select Deduction</option>
+                <option value="None">None</option>
+                <option value="half day">Half Day</option>
+                <option value="day">Full Day</option>
+            </select>
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

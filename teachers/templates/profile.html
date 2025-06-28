@@ -1,0 +1,196 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZSTech | Teacher's Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-info {
+            text-align: center;
+        }
+        .ratings {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+        .rating-star {
+            color: #ffd700;
+        }
+        .sidebar {
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #05050526;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .grades {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .reports {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .send-report-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .send-report-btn:hover {
+            background-color: #45a049;
+        }
+        #id_pic{
+            height: 100%;
+            opacity: 0;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-pic">
+                {%if teacher.pic%}
+                <img src="{{teacher.pic.url}}" alt="Profile Picture">
+                {%else%}
+                <form id="myform" method="post" enctype="multipart/form-data">
+                    {%csrf_token%}
+                    {{form.pic}}
+                </form>
+                <img id="profileImage" src="{%static 'add_user.png'%}" alt="Profile Picture">
+                {%endif%}
+            </div>
+            <div class="profile-info">
+                <h2>{{teacher.name}}</h2>
+                <p>Discipline: {{teacher.subject}}</p>
+                <div class="ratings" data-rating="{{teacher.computed_rating}}">
+                </div>
+            </div>
+        </div>
+        <div class="sidebar">
+        <div class="button-container">
+                <button onclick="window.open('/teacher/{{teacher.id}}/summary')" class="send-report-btn">Review Performance</button>
+                <button onclick="window.open('/reports/teachers/{{teacher.id}}/add')" class="send-report-btn" style="margin-top:20px;">Add Report</button>
+                {%if not teacher.teacher%}
+                    <button onclick="window.open('/accounts/teachers/{{teacher.id}}/signup_teacher')" class="send-report-btn" style="margin-top:20px;background:red;">Register Teacher</button>
+                {%else%}
+                    <button onclick="window.open('/teacher/{{teacher.id}}/reports')" class="send-report-btn" style="margin-top:20px;background:green;">view reports</button>
+                {%endif%}
+            </div>
+        </div>
+    </div>
+    <script>
+        // document.getElementById("id_pic").onchange = previewImage(event)
+        function previewImage(event) {
+            const input = event.target;
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                const imgElement = document.getElementById('profileImage');
+                imgElement.src = reader.result;
+
+                // Show the submit button when an image is chosen
+                const submitButton = document.getElementById('submitButton');
+                submitButton.style.display = 'block';
+            };
+
+            if (input.files && input.files[0]) {
+                reader.readAsDataURL(input.files[0]);
+            }
+            const form = input.closest('form');  // Assumes the file input is inside a form
+            if (form) {
+                form.submit();
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const fileInput = document.getElementById("id_pic");
+            if (fileInput) {
+                fileInput.addEventListener("change", function(event) {
+                    previewImage(event);
+                });
+            }
+        });
+        // Function to convert rating numbers to star symbols
+        function convertToStars(rating) {
+            const maxStars = 5;
+            const fullStar = '★';
+            const halfStar = '☆'; // You can change this to any other symbol for half star representation
+            let stars = '';
+
+            for (let i = 1; i <= maxStars; i++) {
+                if (i <= rating) {
+                    stars += fullStar;
+                } else {
+                    stars += halfStar;
+                }
+            }
+
+            return stars;
+        }
+
+        // Function to populate star ratings in the table
+        function populateStarRatings() {
+            const ratingCells = document.querySelectorAll('div[data-rating]');
+            
+            ratingCells.forEach(cell => {
+                const rating = parseInt(cell.getAttribute('data-rating'));
+                cell.textContent = convertToStars(rating);
+            });
+        }
+
+        // Simulated function to check today's attendance (replace with actual functionality)
+        populateStarRatings();
+    </script>
+</body>
+</html>

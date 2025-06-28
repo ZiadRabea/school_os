@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers Information</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal overflow */
+        }
+        .sidebar {
+            width: 19%;
+            background-color: #333;
+            padding: 20px;
+            position: fixed; /* Fixed position to stay visible */
+            right: 0; /* Align to the right */
+            top: 0; /* Align to the top */
+            height: 100vh; /* Full height */
+            overflow-y: auto; /* Scrollable if content exceeds height */
+            z-index: 1; /* Ensure sidebar is above content */
+            transition: transform 0.3s ease-in-out;
+        }
+        .container {
+            width: 70%;
+            margin: 20px;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            overflow-x: auto; /* Scrollable if content exceeds width */
+            flex: 1; /* Make container take up remaining space */
+        }
+        .search-form {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 8px;
+        }
+        .search-form label {
+            margin-right: 10px;
+        }
+        .search-form input, .search-form select {
+            margin-right: 20px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #444;
+            color: #fff;
+        }
+        .search-form button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            white-space: nowrap; /* Prevent button text wrapping */
+            overflow: hidden; /* Hide overflowing text */
+            text-overflow: ellipsis; /* Show ellipsis for overflow */
+        }
+        .search-form button:hover {
+            background-color: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        tr {
+            cursor: pointer;
+        }
+        td {
+            background-color: #444;
+        }
+        .navbar-toggle{
+            width: 100%;
+            margin: 10px 0;
+            background-color: #2a2a2a;
+            display: none;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .attendance-button, .action-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            white-space: nowrap; /* Prevent button text wrapping */
+            overflow: hidden; /* Hide overflowing text */
+            text-overflow: ellipsis; /* Show ellipsis for overflow */
+        }
+        .action-button:hover {
+            background-color: #45a049;
+        }
+        .red-btn{
+            background: red;
+        }
+        .red-btn:hover{
+            background-color: #fb1b1b;
+        }
+        @media (max-width: 1050px) {
+            .container {
+                width: 90%;
+                margin: 10px;
+                padding: 10px;
+            }
+            .search-form {
+                padding: 10px;
+                display: block !important;
+            }
+            .search-form label,
+            .search-form button {
+                display: block !important;
+                width: 100%;
+                margin: 10px 0;
+            }
+            .search-form input {
+                margin: 0 auto;
+                display: block;
+                width:90%;
+            }
+            .search-form select{
+                width: 100%;
+            }
+            .search-form button {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
+        @media (max-width: 1050px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                display: none; /* Initially hidden */
+                justify-content: space-around;
+                padding: 10px 0;
+                width:90%;
+                margin: 0 auto;
+                border-radius: 4px;
+                transition: transform 0.3s ease-in-out;
+            }
+            .attendance-button, .action-button {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-bottom: 10px;
+                text-align: center;
+                text-decoration: none;
+                display: block;
+                font-size: 16px;
+                width: 90%;
+                margin: 0 auto;
+                margin-top: 10px;
+                white-space: nowrap; /* Prevent button text wrapping */
+                overflow: hidden; /* Hide overflowing text */
+                text-overflow: ellipsis; /* Show ellipsis for overflow */
+            }
+
+                .sidebar.active {
+                    display: block;
+                }
+                .navbar-toggle {
+                    display: block;
+                    width: 90%;
+                    margin: 0 auto;
+                }
+            .container {
+                width: 90%;
+                margin: 10px auto;
+            }
+            .search-form {
+                margin-top: 10px;
+            }
+            .attendance-button, .action-button {
+                padding: 8px 10px;
+                font-size: 14px;
+                margin-bottom: 5px;
+            }
+            .red-btn{
+            background: red;
+            }
+            .red-btn:hover{
+                background-color: #fb1b1b;
+            }
+        }
+        @media (max-width: 1400px) {
+            .search-form label{
+                display: none;
+            }
+            .search-form{
+                display: flex;
+                align-items: center;
+                justify-content: space-around;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="navbar-toggle" onclick="toggleSidebar()">☰</button>
+    <div class="sidebar" id="sidebar">
+        {%if user.profile.type == "School"%}  
+            <a href="/teachers" class="action-button">Teachers 🧑‍🏫 </a>   
+            <a href="/attendance" class="action-button">Attendance 📒</a>
+            <a href="/students" class="action-button">Students 🧑‍🎓</a>
+            <a href="/students/add" class="action-button">Add Student</a>
+            <hr>
+            <a href="/accounts/signup" class="action-button">REGISTER ➕</a>
+            <a href="/students/grades" class="action-button">Grades 🎓</a>
+            <br>
+            <hr>
+            <br>
+            <a href="/students/reset_student_absence" class="action-button red-btn">Reset Students' Absence</a>
+        {%endif%}
+        {%if user.profile.type == "Teacher"%}  
+            <a href="/students" class="action-button">Students</a>
+            <a href="/students/grades" class="action-button">Grades 🎓</a>
+        {%endif%}
+    </div>
+    <div class="container">
+        <h2>Teachers Information</h2>
+        <form class="search-form" method="get">
+            {%csrf_token%}
+            <label for="name">Name:</label>
+            {{filter.form.name}}
+            <label for="discipline">Discipline:</label>
+            {{filter.form.subject}}
+            <label for="salary">Salary:</label>
+            {{filter.form.salary}}
+            <button type="submit">Search</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Discipline</th>
+                    <th>Salary</th>
+                    <th>Phone</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody id="teachers-table">
+                <!-- Sample teacher rows -->
+                {%for teacher in teachers%}
+                <tr onclick="window.location='teacher/{{teacher.id}}';">
+                    <td>{{teacher.name}}</td>
+                    <td>{{teacher.subject}}</td>
+                    <td>{{teacher.salary}}</td>
+                    <td>{{teacher.phone}}</td>
+                    <td data-rating="{{teacher.computed_rating}}"></td>
+                </tr>
+                {%endfor%}
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.getElementById("id_name").placeholder = "Name"
+        document.getElementById("id_salary").placeholder = "Salary"
+        // Function to toggle the sidebar
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+
+        // Function to convert rating numbers to star symbols
+        function convertToStars(rating) {
+            const maxStars = 5;
+            const fullStar = '★';
+            const halfStar = '☆'; // You can change this to any other symbol for half star representation
+            let stars = '';
+
+            for (let i = 1; i <= maxStars; i++) {
+                if (i <= rating) {
+                    stars += fullStar;
+                } else {
+                    stars += halfStar;
+                }
+            }
+
+            return stars;
+        }
+
+        // Function to populate star ratings in the table
+        function populateStarRatings() {
+            const ratingCells = document.querySelectorAll('td[data-rating]');
+            
+            ratingCells.forEach(cell => {
+                const rating = parseInt(cell.getAttribute('data-rating'));
+                cell.textContent = convertToStars(rating);
+            });
+        }
+
+        // Simulated function to search teachers (replace with actual functionality)
+        function searchTeachers() {
+            const name = document.getElementById('name').value.toLowerCase();
+            const discipline = document.getElementById('discipline').value.toLowerCase();
+            const salary = document.getElementById('salary').value;
+
+            const rows = document.querySelectorAll('#teachers-table tr');
+            rows.forEach(row => {
+                const nameCell = row.children[0].textContent.toLowerCase();
+                const disciplineCell = row.children[1].textContent.toLowerCase();
+                const salaryCell = row.children[2].textContent;
+
+                if (nameCell.includes(name) && disciplineCell.includes(discipline) && salaryCell.includes(salary)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Simulated function to check today's attendance (replace with actual functionality)
+        populateStarRatings();
+    </script>
+</body>
+</html>

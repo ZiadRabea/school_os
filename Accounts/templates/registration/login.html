@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .form-container {
+            background-color: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            width: 300px;
+        }
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+        .form-container input {
+			display:block;
+            width: 90%;
+			margin:0 auto;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 4px;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .form-container a {
+            color: #4CAF50;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+{% block content %}
+ {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    {% else %}
+    {% endif %}
+  {% endif %}
+    <div class="form-container">
+        <h2>Login for ZS.Tech SMSys</h2>
+        <form method="POST">
+		{%csrf_token%}
+            {{form.username}}
+            {{form.password}}
+            <button type="submit">Login</button>
+			{% if next %}
+			  <input type="hidden" name="next" value="{{next}}" />
+			{%else%}
+			  <input type="hidden" name="next" value="/" />
+			{%endif%}
+			{# Assumes you setup the password_reset view in your URLconf #}
+        </form>
+        <a href="/accounts/signup/">Sign up</a>
+        <a href="{% url 'password_reset' %}">Forgot Password?</a>
+    </div>
+	{%endblock%}
+	<script>
+	  document.getElementById("id_username").placeholder = "Username"
+	  document.getElementById("id_password").placeholder = "Password"
+	</script>
+</body>
+</html>
+

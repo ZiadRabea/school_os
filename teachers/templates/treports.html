@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Reports</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/imgs/infinitfolio.png" type="image/png">
+    <link rel="stylesheet" href="/static/css/style.css?v=1.0.4">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-N37B2KNWMJ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-N37B2KNWMJ');
+    </script>
+    <style>
+        :root {
+            --background-color: #0c0c0c;
+            --card-color: #1c1c1c;
+            --text-color: #ffffff;
+            --highlight-color: #a0a0a0;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            margin: 20px 0;
+        }
+
+        .reports, button {
+            width: 90%;
+            max-width: 1000px;
+        }
+        button {
+            font-size : 25px;
+            padding : 5px;
+            background : #f00;
+            color : #fff;
+            transition: all .3s ease-in-out;
+            cursor: pointer;
+            border-radius: 10px;
+
+        }
+        button:hover{
+            background : rgb(202, 2, 2);
+        }
+        .report {
+            background-color: var(--card-color);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .report-header {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            position: relative;
+        }
+
+        .report-header:hover {
+            background-color: #2c2c2c;
+        }
+
+        .report-body {
+            display: none;
+            padding: 15px 20px;
+            color: var(--highlight-color);
+            border-top: 1px solid #333;
+        }
+
+        .report.open .report-body {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .report-header {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Reports</h1>
+    <div class="reports">
+        {%for report in reports%}
+        <div class="report">
+            <div class="report-header">{{report.title}} 
+                {%if report.is_positive%}
+                <span style="float: right; margin-right: 10px;">✅</span>
+                {%else%}
+                <span style="float: right; margin-right: 10px;">❌</span>
+                {%endif%}
+            </div>
+            <div class="report-body">
+                {{report.body}}
+            </div>
+        </div>
+        {%endfor%}
+    </div>
+    <a href="reports/clear" style="width: 100%; text-decoration: none; text-align: center;"><button>Reset</button></a>
+    <script>
+        document.querySelectorAll('.report-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const report = header.parentElement;
+                report.classList.toggle('open');
+            });
+        });
+    </script>
+</body>
+</html>

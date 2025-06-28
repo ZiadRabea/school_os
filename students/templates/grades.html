@@ -1,0 +1,131 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZSTech | Grades</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 19%;
+            background-color: #333;
+            padding: 20px;
+            position: fixed;
+            right: 0;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1;
+            transition: transform 0.3s ease-in-out;
+        }
+        .container {
+            width: 70%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            flex: 1;
+        }
+        .grades-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+        .grade-card {
+            background-color: #333;
+            border-radius: 8px;
+            padding: 20px;
+            width: 30%;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+        .grade-card:hover {
+            transform: scale(1.05);
+            background-color: #444;
+        }
+        .grade-card h3 {
+            margin: 10px 0;
+        }
+        @media (max-width: 1050px) {
+            .container {
+                width: 90%;
+                margin: 10px;
+                padding: 10px;
+            }
+            .grades-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .grade-card {
+                width: 90%;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align:center; font-size:30px">Grades</h2>
+        <div class="grades-container">
+            <div class="grade-card" onclick="window.location='/students/grades/1';">
+                <h3>1st Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/2';">
+                <h3>2nd Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/3';">
+                <h3>3rd Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/4';">
+                <h3>4th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/5';">
+                <h3>5th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/6';">
+                <h3>6th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/7';">
+                <h3>7th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/8';">
+                <h3>8th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/9';">
+                <h3>9th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/10';">
+                <h3>10th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/11';">
+                <h3>11th Grade</h3>
+            </div>
+            <div class="grade-card" onclick="window.location='/students/grades/12';">
+                <h3>12th Grade</h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

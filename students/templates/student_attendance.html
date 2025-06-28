@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendances</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+        td {
+            background-color: #444;
+        }
+        .action-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            margin-top:10px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width:100%;
+            font-size: 16px;
+            white-space: nowrap; /* Prevent button text wrapping */
+            overflow: hidden; /* Hide overflowing text */
+            text-overflow: ellipsis; /* Show ellipsis for overflow */
+        }
+        .action-button:hover {
+            background-color: #45a049;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Today's Attendances</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Student's Name</th>
+                    <th>Absence Count</th>
+                    <th style="text-align: center;">is Attending?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Sample attendance rows -->
+                {%for student in students%}
+                <tr>
+                    <td>{{student.name}}</td>
+                    <td>{{student.absence_count}}</td>
+                    {%if student.evaluated and not student.attendance_registered%} 
+                        <td style="text-align: center;">❌</td>
+                    {%elif student.evaluated and student.attendance_registered%} 
+                        <td style="color:green; text-align: center;">✔️</td>
+                    {%else%}
+                        <td style="text-align: center;"><button style="color:white;background-color:red; border-radius:5px; padding:10px; cursor:pointer" onclick="window.open('/students/grades/{{grade}}/{{class}}/{{student.id}}/absence')">X</button></td>
+                    {%endif%}
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <a href="/students/grades/{{grade}}/{{class}}/confirm"> <button class="action-button"> Confirm Changes </button></a>
+    </div>
+</body>
+</html>

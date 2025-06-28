@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounts List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .container {
+            width: 80%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+        th {
+            background-color: #333;
+        }
+        tr:hover {
+            background-color: #3a3a3a;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Accounts List</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Account ID</th>
+                    <th>Username</th>
+                    <th>Account Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {%for teacher in teachers%}
+                <tr>
+                    <td>{{teacher.name}}</td>
+                    <td>{{teacher.phone}}</td>
+                    <td>{{teacher.teacher.school}}</td>
+                    <td class="actions">
+                        <button onclick="window.open('/accounts/profile/{{teacher.id}}')">Edit</button>
+                        <button style="background-color: #f44336;" onclick="window.alert('you have no access to this feature | please contact ZS.Tech Company to perform this task')">Delete</button>
+                    </td>
+                </tr>
+                {%endfor%}
+                <!-- More rows as needed -->
+            </tbody>
+        </table>
+        <button style="width: 100%; margin-top: 20px;" onclick="window.open('/accounts/signup')">Add New Account</button>
+    </div>
+</body>
+</html>

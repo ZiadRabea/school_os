@@ -1,0 +1,174 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZSTech | Teacher Summary</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #2a2a2a;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .profile-info {
+            text-align: center;
+        }
+        .ratings {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+        .rating-star {
+            color: #ffd700;
+        }
+        .sidebar {
+            border-radius: 20px;
+            background: #05050526;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .summary-section {
+            background-color: #333;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .summary-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .summary-data {
+            font-size: 16px;
+            margin:20px;
+        }
+        .button-container {
+            text-align: center;
+        }
+        .send-report-btn {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .send-report-btn:hover {
+            background-color: #45a049;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="profile-section">
+            <div class="profile-pic">
+                {%if teacher.pic%}
+                    <img src="{{teacher.pic.url}}" alt="Profile Picture">
+                {%else%}
+                    <img src="{%static 'add_user.png'%}">
+                {%endif%}
+            </div>
+            <div class="profile-info">
+                <h2>{{teacher.name}}</h2>
+                <p>Discipline: {{teacher.subject}}</p>
+                <div class="ratings" data-rating="{{teacher.rating}}">
+                </div>
+            </div>
+        </div>
+        <div class="sidebar">
+            <div class="summary-section">
+                <div class="summary-title">Summary</div>
+                <div class="summary-data">Absences: {{total_absences}}</div>
+                <div class="summary-data">Late Minutes: {{late_minutes}}</div>
+                <div class="summary-data">Salary Deduction: {{total_salary_deduction}}</div>
+                <div class="summary-data">Total Salary: {{total_salary}}</div>
+            </div>
+            <div class="button-container">
+                <a href="/teacher/{{teacher.id}}/clearcache" onclick="return(window.confirm('This will delete all the Summery data recorded, are you sure you want to proceed?'))"><button style="background:red;margin-bottom:20px;" class="send-report-btn">Clear Data </button></a>
+                <a href="/"><button class="send-report-btn">⬅️ Back</button></a>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Function to convert rating numbers to star symbols
+        function convertToStars(rating) {
+            const maxStars = 5;
+            const fullStar = '★';
+            const halfStar = '☆'; // You can change this to any other symbol for half star representation
+            let stars = '';
+
+            for (let i = 1; i <= maxStars; i++) {
+                if (i <= rating) {
+                    stars += fullStar;
+                } else {
+                    stars += halfStar;
+                }
+            }
+
+            return stars;
+        }
+
+        // Function to populate star ratings in the table
+        function populateStarRatings() {
+            const ratingCells = document.querySelectorAll('div[data-rating]');
+            
+            ratingCells.forEach(cell => {
+                const rating = parseInt(cell.getAttribute('data-rating'));
+                cell.textContent = convertToStars(rating);
+            });
+        }
+
+        // Simulated function to populate summary data (replace with actual values)
+        const summaryData = {
+            total_absences: 5, // Replace with actual total absences value
+            total_late_minutes: 30, // Replace with actual total late minutes value
+            total_salary_deduction: 1000, // Replace with actual total salary deduction value
+        };
+
+        // Update summary data in HTML
+        document.querySelector('.summary-data:nth-of-type(1)').textContent = `Absences: ${summaryData.total_absences}`;
+        document.querySelector('.summary-data:nth-of-type(2)').textContent = `Total Late Minutes: ${summaryData.total_late_minutes}`;
+        document.querySelector('.summary-data:nth-of-type(3)').textContent = `Total Salary Deduction: ${summaryData.total_salary_deduction}`;
+
+        // Initialize star ratings
+        populateStarRatings();
+    </script>
+</body>
+</html>
